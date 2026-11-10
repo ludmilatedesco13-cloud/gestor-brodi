@@ -396,15 +396,17 @@
         // =========================================================================
         // CONFIGURACIÓN DE NEON CONECTADA POR WEBSOCKETS (DIRECTA DESDE NETLIFY)
         // =========================================================================
-        const NEON_CONNECTION_STRING = "postgresql://neondb_owner:npg_b5mlNjQ0hoia@ep-gentle-voice-beo8k744-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
-        
+        const NEON_CONNECTION_STRING = "postgresql://neondb_owner:npg_b5mlNjQ0hoia@ep-gentle-voice-beo8k744-pooler.c-9.us-east-2.aws.neon.tech/neondb?sslmode=require";
+
         let sql = null;
         try {
-            if (window.neon && window.neon.neon && NEON_CONNECTION_STRING) {
+            if (typeof neon !== 'undefined' && neon.neon) {
+                sql = neon.neon(NEON_CONNECTION_STRING);
+            } else if (window.neon && window.neon.neon) {
                 sql = window.neon.neon(NEON_CONNECTION_STRING);
             }
         } catch (e) {
-            console.warn("Error al inicializar el driver de Neon", e);
+            console.warn("Error al conectar con Neon:", e);
         }
 
         // State Management
